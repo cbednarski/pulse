@@ -30,7 +30,14 @@ class Formatter
     {
         if(php_sapi_name() === 'cli') {
             echo $this->toCli();
-        } elseif($this->acce)
+        } elseif($this->acceptsJson()) {
+            echo $this->toJson();
+        } elseif($this->isBrowser()) {
+            echo $this->toHtml();
+        } else {
+            $this->contentType("text/plain");
+            echo $this->toCli();
+        }
         // if cli, do cli
         // if browser, do html
         // if accepts = application/json
@@ -44,7 +51,7 @@ class Formatter
         }
     }
 
-    private acceptsJson()
+    private function acceptsJson()
     {
         // Guard if we're not running in a web server
         if(!isset($_SERVER['HTTP_ACCEPT'])) {
