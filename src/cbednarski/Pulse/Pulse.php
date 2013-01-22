@@ -39,11 +39,6 @@ class Pulse
             }
         }
 
-        return true;
-    }
-
-    public function summary()
-    {
         $formatter = new Formatter($this->healthchecks);
         $formatter->autoexec();
     }
