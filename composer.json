@@ -1,0 +1,13 @@
+{
+    "name": "cbednarski/pulse",
+    "description": "A healthcheck framework for PHP",
+    "authors": [
+        {
+            "name": "Chris Bednarski",
+            "email": "banzaimonkey@gmail.com"
+        }
+    ],
+    "require": {
+
+    }
+}
