@@ -12,7 +12,7 @@ class Pulse
      * @param string $description A description of this check
      * @param Closure $healthcheck A callable that returns true when the check passes, false on failure
      */
-    public function add($description, Closure $healthcheck)
+    public function add($description, \Closure $healthcheck)
     {
         $this->healthchecks[] = new Healthcheck($description, $healthcheck);
     }
