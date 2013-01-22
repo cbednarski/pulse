@@ -20,6 +20,8 @@ class Pulse
     /**
      * Add an instance of healthcheck, useful if you want to subclass
      * the healthcheck class and add custom behavior.
+     *
+     * @param Healthcheck $healthcheck
      */
     public function addHealthcheck(Healthcheck $healthcheck)
     {

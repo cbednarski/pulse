@@ -13,35 +13,28 @@ class Formatter
 
     public function toJson()
     {
-
+        $this->contentType('application/json');
     }
 
     public function toHtml()
     {
-
+        $this->contentType('text/html');
     }
 
     public function toCli()
     {
-
+        $this->contentType("text/plain");
     }
 
     public function autoexec()
     {
-        if(php_sapi_name() === 'cli') {
-            echo $this->toCli();
-        } elseif($this->acceptsJson()) {
+        if($this->acceptsJson()) {
             echo $this->toJson();
         } elseif($this->isBrowser()) {
             echo $this->toHtml();
         } else {
-            $this->contentType("text/plain");
             echo $this->toCli();
         }
-        // if cli, do cli
-        // if browser, do html
-        // if accepts = application/json
-        // else do plaintext
     }
 
     private function contentType($type)
