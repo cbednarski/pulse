@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class TestHealthcheck extends PHPUnit_Framework_TestCase
+class HealthcheckTest extends PHPUnit_Framework_TestCase
 {
     public function testGetDescription()
     {

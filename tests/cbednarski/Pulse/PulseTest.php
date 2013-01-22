@@ -1,8 +1,8 @@
 <?php
 
-require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class TestPulse extends PHPUnit_Framework_TestCase
+class PulseTest extends PHPUnit_Framework_TestCase
 {
     public function testBasicUsage()
     {
