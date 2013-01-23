@@ -62,6 +62,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
         background-color: #fff;
         padding: 20px;
         margin: 20px auto;
+        border-radius: 2px;
     }
     ul{
         margin: 0;
@@ -72,6 +73,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
         margin: 0 0 3px 0;
         padding: 8px;
         background-color: #ccc;
+        border-radius: 2px;
     }
     .pass {
         background-color: #7dcd5f;
@@ -100,6 +102,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
         <ul>
             <li class="healthcheck pass">This test should pass: <b>pass</b></li>
             <li class="healthcheck fail">This test should fail: <b>fail</b></li>
+
             <li class="summary fail">Healthcheck summary: fail</li>
         </ul>
         <div id="footer">
@@ -111,6 +114,8 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 </body>
 </head>
 HEREDOC;
+
+        $this->assertEquals($expected, Formatter::toHtml($this->fail_pulse));
     }
 
     public function testToPlainFailure()

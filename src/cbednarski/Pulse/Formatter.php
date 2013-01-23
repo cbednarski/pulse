@@ -17,18 +17,45 @@ class Formatter
             );
         }
 
-        static::responsePassing($temp['all-passing']);
+        static::responseIsPassing($temp['all-passing']);
 
         return json_encode($temp);;
+    }
+
+    public static function getTemplate()
+    {
+        return file_get_contents(__DIR__ . '/template.html');
     }
 
     public static function toHtml(Pulse $pulse)
     {
         static::contentType('text/html');
 
-        $temp = '';
+        $output = static::getTemplate();
+        $checks = '';
 
-        static::responsePassing($temp['all-passing']);
+        // We'll do this first since it's less volatile
+        $output = str_replace('%summary%', static::htmlSummary($pulse->getStatus()), $output);
+
+        foreach ($pulse->getHealthchecks() as $healthcheck) {
+            $checks .= static::htmlHealthcheck($healthcheck);
+        }
+
+        $output = str_replace('%healthchecks%', $checks, $output);
+
+        static::responseIsPassing($pulse->getStatus());
+
+        return $output;
+    }
+
+    public static function htmlHealthcheck(Healthcheck $healthcheck)
+    {        
+        return '            <li class="healthcheck '.static::statusToStr($healthcheck->getStatus()).'">'.$healthcheck->getDescription().': <b>'.static::statusToStr($healthcheck->getStatus()).'</b></li>'.PHP_EOL;
+    }
+
+    public static function htmlSummary($status)
+    {
+        return '            <li class="summary '.static::statusToStr($status).'">Healthcheck summary: '.static::statusToStr($status).'</li>';
     }
 
     public static function toPlain(Pulse $pulse)
@@ -43,7 +70,7 @@ class Formatter
 
         $temp .= PHP_EOL . 'Healthcheck summary: ' . self::statusToStr($pulse->getStatus());
 
-        static::responsePassing($pulse->getStatus());
+        static::responseIsPassing($pulse->getStatus());
 
         return $temp;
     }
@@ -97,7 +124,7 @@ class Formatter
         }
     }
 
-    private static function responsePassing($isPassing)
+    private static function responseIsPassing($isPassing)
     {
         if (php_sapi_name() !== 'cli') {
             if ($isPassing) {
