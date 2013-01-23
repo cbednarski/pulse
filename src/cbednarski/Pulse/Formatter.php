@@ -28,9 +28,9 @@ class Formatter
 
     public function autoexec()
     {
-        if($this->acceptsJson()) {
+        if ($this->acceptsJson()) {
             echo $this->toJson();
-        } elseif($this->isBrowser()) {
+        } elseif ($this->isBrowser()) {
             echo $this->toHtml();
         } else {
             echo $this->toCli();
@@ -39,7 +39,7 @@ class Formatter
 
     private function contentType($type)
     {
-        if(php_sapi_name() !== 'cli') {
+        if (php_sapi_name() !== 'cli') {
             header('Content-Type: ' . $type);
         }
     }
@@ -47,7 +47,7 @@ class Formatter
     private function acceptsJson()
     {
         // Guard if we're not running in a web server
-        if(!isset($_SERVER['HTTP_ACCEPT'])) {
+        if (!isset($_SERVER['HTTP_ACCEPT'])) {
             return false;
         }
 
@@ -56,9 +56,9 @@ class Formatter
 
     private function isBrowser()
     {
-        if(isset($_SERVER['HTTP_USER_AGENT'])) {
-            foreach(array('Chrome', 'Firefox', 'Safari', 'Opera') as $browser){
-                if(strpos($_SERVER['HTTP_USER_AGENT'], $browser) !== false){
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            foreach (array('Chrome', 'Firefox', 'Safari', 'Opera') as $browser) {
+                if (strpos($_SERVER['HTTP_USER_AGENT'], $browser) !== false) {
                     return true;
                 }
             }

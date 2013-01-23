@@ -9,9 +9,12 @@ class PulseTest extends PHPUnit_Framework_TestCase
         $file = __FILE__;
 
         $pulse = new cbednarski\Pulse\Pulse();
-        $pulse->add("Test that this file exists", function() use ($file){
-            return file_exists($file);
-        });
+        $pulse->add(
+            "Test that this file exists",
+            function () use ($file) {
+                return file_exists($file);
+            }
+        );
         $pulse->check();
     }
 }

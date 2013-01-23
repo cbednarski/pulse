@@ -7,19 +7,21 @@ class HealthcheckTest extends PHPUnit_Framework_TestCase
     public function testGetDescription()
     {
         $description = 'My description';
-        $check = new cbednarski\Pulse\Healthcheck($description, function(){});
+        $check = new cbednarski\Pulse\Healthcheck($description, function () {});
         $this->assertEquals($description, $check->getDescription());
     }
 
     public function testGetStatus()
     {
-        $check = new cbednarski\Pulse\Healthcheck('testing!', function(){return true;});
+        $check = new cbednarski\Pulse\Healthcheck('testing!', function () {
+            return true;
+        });
         $this->assertTrue($check->getStatus(), 'Verify truthy return value');
 
         $test = new StdClass();
         $test->blah = 1;
 
-        $check2 = new cbednarski\Pulse\Healthcheck('testing!', function() use ($test) {
+        $check2 = new cbednarski\Pulse\Healthcheck('testing!', function () use ($test) {
             $test->blah++;
             return false;
         });

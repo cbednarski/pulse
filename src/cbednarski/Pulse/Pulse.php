@@ -29,14 +29,14 @@ class Pulse
     }
 
     /**
-     * 
+     *
      */
     public function check()
     {
         $results = array();
 
-        foreach($this->healthchecks as $healthcheck){
-            if($healthcheck->getStatus() === false){
+        foreach ($this->healthchecks as $healthcheck) {
+            if ($healthcheck->getStatus() === false) {
                 return false;
             }
         }

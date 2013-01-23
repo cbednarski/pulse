@@ -21,7 +21,7 @@ class Healthcheck
 
     public function getStatus()
     {
-        if($this->status === null){;
+        if ($this->status === null) {
             $this->status = $this->call();
         }
         return $this->status;
