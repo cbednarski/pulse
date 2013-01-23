@@ -29,19 +29,32 @@ class Pulse
     }
 
     /**
+     * Evaluate all healthchecks and return an aggregate boolean
      *
+     * @return bool True if all tests pass, false otherwise
+     */
+    public function getStatus()
+    {
+        $status = true;
+
+        foreach ($this->healthchecks as $healthcheck) {
+            // Shortcut the rest if any check fails
+            $status = $status && $healthcheck->getStatus();
+        }
+
+        return $status;
+    }
+
+    /**
+     * Evaluate all healthchecks and output a summary, using Formatter->autoexec()
      */
     public function check()
     {
         $results = array();
 
-        foreach ($this->healthchecks as $healthcheck) {
-            if ($healthcheck->getStatus() === false) {
-                return false;
-            }
-        }
-
         $formatter = new Formatter($this->healthchecks);
         $formatter->autoexec();
+
+        
     }
 }
