@@ -37,14 +37,7 @@ class Formatter
         }
     }
 
-    private function contentType($type)
-    {
-        if (php_sapi_name() !== 'cli') {
-            header('Content-Type: ' . $type);
-        }
-    }
-
-    private function acceptsJson()
+    public function acceptsJson()
     {
         // Guard if we're not running in a web server
         if (!isset($_SERVER['HTTP_ACCEPT'])) {
@@ -54,15 +47,22 @@ class Formatter
         return strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json') !== false;
     }
 
-    private function isBrowser()
+    public function isBrowser()
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            foreach (array('Chrome', 'Firefox', 'Safari', 'Opera') as $browser) {
+            foreach (array('Mozilla', 'Opera', 'AppleWebKit') as $browser) {
                 if (strpos($_SERVER['HTTP_USER_AGENT'], $browser) !== false) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private function contentType($type)
+    {
+        if (php_sapi_name() !== 'cli') {
+            header('Content-Type: ' . $type);
+        }
     }
 }
