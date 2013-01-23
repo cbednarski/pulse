@@ -11,22 +11,37 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->pulse = new Pulse();
+        $pulse = new Pulse();
+
+        $pulse->add('This test should pass', function(){
+            return true;
+        });
+        $pulse->add('This test should fail', function(){
+            return false;
+        });
+
+        $this->pulse = $pulse;
     }
 
     public function testToJson()
     {
+        // Because I'm that lazy.
+        $pulse = $this->pulse;
 
+        $formatter = new Formatter($pulse->getHealthchecks());
+        $expected = '{"status":false,"healthchecks":[{"description":"This test should pass","passing":true},{"description":"This test should fail","passing":false}]}';
+
+        $this->assertEquals($expected, $formatter->toJson());
     }
 
     public function testToHtml()
     {
-
+        $pulse = $this->pulse;
     }
 
     public function testToCli()
     {
-
+        $pulse = $this->pulse;
     }
 
     public function testIsBrowser()

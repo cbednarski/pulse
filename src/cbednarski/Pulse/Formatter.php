@@ -4,16 +4,27 @@ namespace cbednarski\Pulse;
 
 class Formatter
 {
-    private $data;
+    private $healthchecks;
 
-    public function __construct(Array $data)
+    public function __construct(Array $healthchecks)
     {
-        $this->data = $data;
+        $this->healthchecks = $healthchecks;
     }
 
     public function toJson()
     {
         $this->contentType('application/json');
+
+        $temp = array('status' => false, 'healthchecks' => array());
+
+        foreach ($this->healthchecks as $healthcheck) {
+            $temp['healthchecks'][] = array(
+                'description' => $healthcheck->getDescription(),
+                'passing' => $healthcheck->getStatus()
+            );
+        }
+
+        return json_encode($temp);;
     }
 
     public function toHtml()

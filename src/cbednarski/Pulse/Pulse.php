@@ -29,9 +29,9 @@ class Pulse
     }
 
     /**
-     * Evaluate all healthchecks and return an aggregate boolean
+     * Evaluate all healthchecks and return a boolean based on the aggregate.
      *
-     * @return bool True if all tests pass, false otherwise
+     * @return bool true if all tests pass, false otherwise
      */
     public function getStatus()
     {
@@ -46,6 +46,14 @@ class Pulse
     }
 
     /**
+     * @return Array List of all healthchecks currently registered
+     */
+    public function getHealthchecks()
+    {
+        return $this->healthchecks;
+    }
+
+    /**
      * Evaluate all healthchecks and output a summary, using Formatter->autoexec()
      */
     public function check()
@@ -54,7 +62,5 @@ class Pulse
 
         $formatter = new Formatter($this->healthchecks);
         $formatter->autoexec();
-
-        
     }
 }
