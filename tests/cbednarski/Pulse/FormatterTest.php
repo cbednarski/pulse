@@ -46,7 +46,71 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testToHtml()
     {
-
+        $expected = <<<HEREDOC
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    body {
+        margin: 0;
+        background-color: #888;
+        font-family: sans-serif;
+        color: #000;
+    }
+    #wrapper {
+        max-width: 40em;
+        background-color: #fff;
+        padding: 20px;
+        margin: 20px auto;
+    }
+    ul{
+        margin: 0;
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin: 0 0 3px 0;
+        padding: 8px;
+        background-color: #ccc;
+    }
+    .pass {
+        background-color: #7dcd5f;
+    }
+    .fail {
+        background-color: #ff65a8;
+    }
+    .warn {
+        background-color: #ffbbe2;
+    }
+    .summary {
+        margin: 30px 0;
+        font-weight: bold;
+    }
+    #footer>p:first-of-type {
+        font-size: .9em;
+    }
+    p{
+        color: #777;
+        margin: 2px 0;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <ul>
+            <li class="healthcheck pass">This test should pass: <b>pass</b></li>
+            <li class="healthcheck fail">This test should fail: <b>fail</b></li>
+            <li class="summary fail">Healthcheck summary: fail</li>
+        </ul>
+        <div id="footer">
+            <p>This healthcheck page can also be accessed in machine-readable formats via CURL:</p>
+            <p><code>$ curl http://example.com/healthcheck.php #plaintext</code></p>
+            <p><code>$ curl -H "Accept: application/json" http://example.com/healthcheck.php</code></p>
+        </div>
+    </div>
+</body>
+</head>
+HEREDOC;
     }
 
     public function testToPlainFailure()

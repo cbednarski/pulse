@@ -26,6 +26,8 @@ class Formatter
     {
         static::contentType('text/html');
 
+        $temp = '';
+
         static::responsePassing($temp['all-passing']);
     }
 
