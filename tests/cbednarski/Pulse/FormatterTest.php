@@ -21,8 +21,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testIsBrowser()
     {
-        $pulse = new cbednarski\Pulse\Pulse();
-        $formatter = new cbednarski\Pulse\Formatter($pulse);
+        $formatter = new cbednarski\Pulse\Formatter(array());
 
         $_SERVER['HTTP_USER_AGENT'] = 'Opera/9.80 (Android 4.0.4; Linux; Opera Mobi/ADR-1301080958) Presto/2.11.355 Version/12.10';
         $this->assertTrue($formatter->isBrowser());
@@ -40,6 +39,19 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testAcceptsJson()
     {
+        $formatter = new cbednarski\Pulse\Formatter(array());
 
+        $_SERVER['HTTP_ACCEPT'] = 'text/html';
+        $this->assertFalse($formatter->acceptsJson());
+
+        $_SERVER['HTTP_ACCEPT'] = 'application/json';
+        $this->assertTrue($formatter->acceptsJson());
+
+        // Technically this is not compliant, but we'll accept it anyway.
+        $_SERVER['HTTP_ACCEPT'] = 'text/html; Application/JSON';
+        $this->assertTrue($formatter->acceptsJson());
+
+        unset($_SERVER['HTTP_ACCEPT']);
+        $this->assertFalse($formatter->acceptsJson());
     }
 }

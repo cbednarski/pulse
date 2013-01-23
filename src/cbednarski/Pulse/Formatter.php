@@ -6,7 +6,7 @@ class Formatter
 {
     private $data;
 
-    public function __construct($data)
+    public function __construct(Array $data)
     {
         $this->data = $data;
     }
