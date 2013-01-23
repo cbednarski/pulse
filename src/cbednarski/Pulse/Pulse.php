@@ -58,9 +58,6 @@ class Pulse
      */
     public function check()
     {
-        $results = array();
-
-        $formatter = new Formatter($this->healthchecks);
-        $formatter->autoexec();
+        Formatter::autoexec($this);
     }
 }

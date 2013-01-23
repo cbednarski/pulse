@@ -50,7 +50,7 @@ class Formatter
 
     public static function htmlHealthcheck(Healthcheck $healthcheck)
     {        
-        return '            <li class="healthcheck '.static::statusToStr($healthcheck->getStatus()).'">'.$healthcheck->getDescription().': <b>'.static::statusToStr($healthcheck->getStatus()).'</b></li>'.PHP_EOL;
+        return '            <li class="healthcheck '.static::statusToStr($healthcheck->getStatus()).'">'.$healthcheck->getDescription().': <b>'.static::statusToStr($healthcheck->getStatus()).'</b></li>'."\n";
     }
 
     public static function htmlSummary($status)
