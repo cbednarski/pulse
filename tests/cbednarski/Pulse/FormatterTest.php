@@ -2,8 +2,18 @@
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
+use cbednarski\Pulse\Pulse as Pulse;
+use cbednarski\Pulse\Formatter as Formatter;
+
 class FormatterTest extends PHPUnit_Framework_TestCase
 {
+    private $pulse;
+
+    public function setUp()
+    {
+        $this->pulse = new Pulse();
+    }
+
     public function testToJson()
     {
 
@@ -21,7 +31,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testIsBrowser()
     {
-        $formatter = new cbednarski\Pulse\Formatter(array());
+        $formatter = new Formatter(array());
 
         $_SERVER['HTTP_USER_AGENT'] = 'Opera/9.80 (Android 4.0.4; Linux; Opera Mobi/ADR-1301080958) Presto/2.11.355 Version/12.10';
         $this->assertTrue($formatter->isBrowser());
@@ -39,7 +49,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testAcceptsJson()
     {
-        $formatter = new cbednarski\Pulse\Formatter(array());
+        $formatter = new Formatter(array());
 
         $_SERVER['HTTP_ACCEPT'] = 'text/html';
         $this->assertFalse($formatter->acceptsJson());
