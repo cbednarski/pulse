@@ -4,51 +4,63 @@ namespace cbednarski\Pulse;
 
 class Formatter
 {
-    private $healthchecks;
-
-    public function __construct(Array $healthchecks)
+    public static function toJson(Pulse $pulse)
     {
-        $this->healthchecks = $healthchecks;
-    }
+        static::contentType('application/json');
 
-    public function toJson()
-    {
-        $this->contentType('application/json');
+        $temp = array('all-passing' => $pulse->getStatus(), 'healthchecks' => array());
 
-        $temp = array('status' => false, 'healthchecks' => array());
-
-        foreach ($this->healthchecks as $healthcheck) {
+        foreach ($pulse->getHealthchecks() as $healthcheck) {
             $temp['healthchecks'][] = array(
                 'description' => $healthcheck->getDescription(),
                 'passing' => $healthcheck->getStatus()
             );
         }
 
+        static::responsePassing($temp['all-passing']);
+
         return json_encode($temp);;
     }
 
-    public function toHtml()
+    public static function toHtml(Pulse $pulse)
     {
-        $this->contentType('text/html');
+        static::contentType('text/html');
+
+        static::responsePassing($temp['all-passing']);
     }
 
-    public function toCli()
+    public static function toPlain(Pulse $pulse)
     {
-        $this->contentType("text/plain");
+        static::contentType("text/plain");
+
+        $temp = '';
+
+        foreach ($pulse->getHealthchecks() as $healthcheck) {
+            $temp['healthchecks'][] = array(
+                'description' => $healthcheck->getDescription(),
+                'passing' => $healthcheck->getStatus()
+            );
+        }
+
+        $temp .= 'Healthcheck summary: ' . $pulse->getStatus() ? 'pass' : 'fail';
+
+        static::responsePassing($temp['all-passing']);
+
+        return $temp;
     }
 
-    public function autoexec()
+    public static function autoexec(Pulse $pulse)
     {
-        if ($this->acceptsJson()) {
-            echo $this->toJson();
-        } elseif ($this->isBrowser()) {
-            echo $this->toHtml();
+        if (static::acceptsJson()) {
+            echo static::toJson($pulse);
+        } elseif (static::isBrowser()) {
+            echo static::toHtml($pulse);
         } else {
-            echo $this->toCli();
+            echo static::toPlain($pulse);
         }
     }
 
-    public function acceptsJson()
+    public static function acceptsJson()
     {
         // Guard if we're not running in a web server
         if (!isset($_SERVER['HTTP_ACCEPT'])) {
@@ -58,7 +70,7 @@ class Formatter
         return strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json') !== false;
     }
 
-    public function isBrowser()
+    public static function isBrowser()
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             foreach (array('Mozilla', 'Opera', 'AppleWebKit') as $browser) {
@@ -70,10 +82,21 @@ class Formatter
         return false;
     }
 
-    private function contentType($type)
+    private static function contentType($type)
     {
         if (php_sapi_name() !== 'cli') {
             header('Content-Type: ' . $type);
+        }
+    }
+
+    private static function responsePassing($isPassing)
+    {
+        if (php_sapi_name() !== 'cli') {
+            if ($isPassing) {
+                http_response_code(200);
+            } else {
+                http_response_code(503);
+            }
         }
     }
 }
