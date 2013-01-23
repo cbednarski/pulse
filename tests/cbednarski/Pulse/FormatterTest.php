@@ -57,6 +57,8 @@ This test should fail: fail
 
 Healthcheck summary: fail
 HEREDOC;
+
+        $this->assertEquals($expected, Formatter::toPlain($this->fail_pulse));
     }
 
     public function testToPlainSuccess()
@@ -67,6 +69,8 @@ This test should also pass: pass
 
 Healthcheck summary: pass
 HEREDOC;
+
+        $this->assertEquals($expected, Formatter::toPlain($this->success_pulse));
     }
 
     public function testIsBrowser()

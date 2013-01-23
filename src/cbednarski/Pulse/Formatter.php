@@ -36,17 +36,23 @@ class Formatter
         $temp = '';
 
         foreach ($pulse->getHealthchecks() as $healthcheck) {
-            $temp['healthchecks'][] = array(
-                'description' => $healthcheck->getDescription(),
-                'passing' => $healthcheck->getStatus()
-            );
+            $temp .= $healthcheck->getDescription() . ': ' . self::statusToStr($healthcheck->getStatus()) . PHP_EOL;
         }
 
-        $temp .= 'Healthcheck summary: ' . $pulse->getStatus() ? 'pass' : 'fail';
+        $temp .= PHP_EOL . 'Healthcheck summary: ' . self::statusToStr($pulse->getStatus());
 
-        static::responsePassing($temp['all-passing']);
+        static::responsePassing($pulse->getStatus());
 
         return $temp;
+    }
+
+    public static function statusToStr($status)
+    {
+        if($status) {
+            return 'pass';
+        } else {
+            return 'fail';
+        }
     }
 
     public static function autoexec(Pulse $pulse)
