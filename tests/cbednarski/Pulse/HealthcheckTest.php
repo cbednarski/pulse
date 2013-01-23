@@ -2,18 +2,20 @@
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
+use cbednarski\Pulse\Healthcheck;
+
 class HealthcheckTest extends PHPUnit_Framework_TestCase
 {
     public function testGetDescription()
     {
         $description = 'My description';
-        $check = new cbednarski\Pulse\Healthcheck($description, function () {});
+        $check = new Healthcheck($description, function () {});
         $this->assertEquals($description, $check->getDescription());
     }
 
     public function testGetStatus()
     {
-        $check = new cbednarski\Pulse\Healthcheck('testing!', function () {
+        $check = new Healthcheck('testing!', function () {
             return true;
         });
         $this->assertTrue($check->getStatus(), 'Verify truthy return value');
@@ -21,7 +23,7 @@ class HealthcheckTest extends PHPUnit_Framework_TestCase
         $test = new StdClass();
         $test->blah = 1;
 
-        $check2 = new cbednarski\Pulse\Healthcheck('testing!', function () use ($test) {
+        $check2 = new Healthcheck('testing!', function () use ($test) {
             $test->blah++;
             return false;
         });
