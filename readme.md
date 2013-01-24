@@ -22,14 +22,13 @@ You can install this into your project using [composer](http://getcomposer.org/d
 }
 ```
 
-Run `composer install`, include `/vendor/autoload.php`, and you're off to the races!
+Run `composer install`, include `vendor/autoload.php`, and you're off to the races!
 
 ## Example Usage
 
-`healthcheck.php`
+Here's an example implementation of `healthcheck.php` that checks connectivity to memcache:
 
 ```php
-
 $pulse = new cbednarski\Pulse\Pulse();
 
 $pulse->add("Check that config file is readable", function(){
