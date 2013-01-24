@@ -55,11 +55,19 @@ $pulse->add("Check memcache connectivity", function() use ($config) {
 $pulse->check();
 ```
 
-## Special Features
+## Response Specification
 
 Pulse can be run via command-line, accessed via the browser, or used with tools like CURL.
 
-Pulse automatically detects whether you're running from a browser, commandline, or CURLy interface and responds with html, json, or plaintext as appropriate.
+Pulse automatically detects whether you're running from a browser, commandline, or CURLy interface and responds with color-blind-friendly html, json, or plaintext as appropriate.
+
+#### Status Codes
+
+Pulse responds with `200` status codes when all tests pass. If a test fails, pulse responds with `503`. You can see these via curl:
+
+	$ curl -i http://example.com/healthcheck.php
+
+#### JSON Format
 
 To enable json-y goodness, you'll need to send `Accept: application/json`. E.g:
 
