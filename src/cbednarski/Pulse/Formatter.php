@@ -13,6 +13,7 @@ class Formatter
         foreach ($pulse->getHealthchecks() as $healthcheck) {
             $temp['healthchecks'][] = array(
                 'description' => $healthcheck->getDescription(),
+                'type' => $healthcheck->getType(),
                 'passing' => $healthcheck->getStatus()
             );
         }

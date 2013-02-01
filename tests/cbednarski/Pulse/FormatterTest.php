@@ -32,14 +32,14 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testToJsonFailure()
     {
-        $expected = '{"all-passing":false,"healthchecks":[{"description":"This test should pass","passing":true},{"description":"This test should fail","passing":false}]}';
+        $expected = '{"all-passing":false,"healthchecks":[{"description":"This test should pass","type":"critical","passing":true},{"description":"This test should fail","type":"critical","passing":false}]}';
 
         $this->assertEquals($expected, Formatter::toJson($this->fail_pulse));
     }
 
     public function testToJsonSuccess()
     {
-        $expected = '{"all-passing":true,"healthchecks":[{"description":"This test should pass","passing":true},{"description":"This test should also pass","passing":true}]}';
+        $expected = '{"all-passing":true,"healthchecks":[{"description":"This test should pass","type":"critical","passing":true},{"description":"This test should also pass","type":"critical","passing":true}]}';
 
         $this->assertEquals($expected, Formatter::toJson($this->success_pulse));
     }
