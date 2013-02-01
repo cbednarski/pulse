@@ -9,12 +9,26 @@ Pulse allows you to easily write healthchecks for your application and display a
 
 Healthchecks are a great way to test system health and connectivity to other services. For example, you can verify connectivity to memcache or mysql, that your app can read / write to certain files, or that your API key for a third-party service is still working.
 
+## Installation
+
+You can install this into your project using [composer](http://getcomposer.org/doc/00-intro.md#installation-nix). Create a `composer.json` file in the root of your project and add the following:
+
+```json
+{
+    "require": {
+        "php": ">=5.3.0",
+        "cbednarski/Pulse": "dev-master"
+    }
+}
+```
+
+Run `composer install`, include `vendor/autoload.php`, and you're off to the races!
+
 ## Example Usage
 
-`healthcheck.php`
+Here's an example implementation of `healthcheck.php` that checks connectivity to memcache:
 
 ```php
-
 $pulse = new cbednarski\Pulse\Pulse();
 
 $pulse->add("Check that config file is readable", function(){
@@ -41,11 +55,19 @@ $pulse->add("Check memcache connectivity", function() use ($config) {
 $pulse->check();
 ```
 
-## Special Features
+## Response Specification
 
 Pulse can be run via command-line, accessed via the browser, or used with tools like CURL.
 
-Pulse automatically detects whether you're running from a browser, commandline, or CURLy interface and responds with html, json, or plaintext as appropriate.
+Pulse automatically detects whether you're running from a browser, commandline, or CURLy interface and responds with color-blind-friendly html, json, or plaintext as appropriate.
+
+#### Status Codes
+
+Pulse responds with `200` status codes when all tests pass. If a test fails, pulse responds with `503`. You can see these via curl:
+
+	$ curl -i http://example.com/healthcheck.php
+
+#### JSON Format
 
 To enable json-y goodness, you'll need to send `Accept: application/json`. E.g:
 
