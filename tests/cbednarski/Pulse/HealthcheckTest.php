@@ -19,6 +19,7 @@ class HealthcheckTest extends PHPUnit_Framework_TestCase
             return true;
         });
         $this->assertTrue($check->getStatus(), 'Verify truthy return value');
+        $this->assertEquals(Healthcheck::WARNING, $check->getType());
 
         $test = new StdClass();
         $test->blah = 1;
@@ -33,5 +34,33 @@ class HealthcheckTest extends PHPUnit_Framework_TestCase
 
         $check2->getStatus();
         $this->assertEquals(2, $test->blah, 'Test is only executed once');
+    }
+
+    public function testWarning()
+    {
+        $check = new Healthcheck("This is a warning", function(){
+            return true;
+        }, Healthcheck::WARNING);
+
+        $this->assertEquals(Healthcheck::WARNING, $check->getType());
+    }
+
+    public function testInfo()
+    {
+        $check = new Healthcheck("This is a info-level check", function(){
+            return "This is a message!";
+        }, Healthcheck::INFO);
+
+        $this->assertEquals(Healthcheck::INFO, $check->getType());
+        $this->assertEquals("This is a message!", $check->getStatus());
+    }
+
+    public function testCritical()
+    {
+        $check = new Healthcheck("This is a critical check", function(){
+            return true;
+        }, Healthcheck::CRITICAL);
+
+        $this->assertEquals(Healthcheck::CRITICAL, $check->getType());
     }
 }

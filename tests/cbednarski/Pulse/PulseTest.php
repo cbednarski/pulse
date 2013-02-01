@@ -2,8 +2,8 @@
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-use cbednarski\Pulse\Pulse as Pulse;
-use cbednarski\Pulse\Healthcheck as Healthcheck;
+use cbednarski\Pulse\Pulse;
+use cbednarski\Pulse\Healthcheck;
 
 class PulseTest extends PHPUnit_Framework_TestCase
 {
@@ -34,5 +34,41 @@ class PulseTest extends PHPUnit_Framework_TestCase
 
         // Verify healthcheck aggregate is failing now
         $this->assertFalse($pulse->getStatus());
+    }
+
+    public function testTypes()
+    {
+        $pulse = new Pulse();
+
+        $pulse->addWarning("Test explicit warning", function() {
+            return false;
+        });
+
+        $pulse->addInfo("Output some info", function() {
+            return "Testing!";
+        });
+
+        $this->assertEquals(true, $pulse->getStatus(),
+            "No critical failures, summary should pass");
+
+        $pulse->add("Test default (warning)", function() {
+            return false;
+        });
+
+        $pulse->addCritical("Test critical failure", function() {
+            return false;
+        });
+
+        // At this point we have one critical failure so the check should fail
+        $this->assertEquals(false, $pulse->getStatus(),
+            "One critical failure, summary should fail");
+
+
+        $array = $pulse->getHealthchecks();
+
+        $this->assertEquals(Healthcheck::WARNING,  $array[0]->getType());
+        $this->assertEquals(Healthcheck::INFO,     $array[1]->getType());
+        $this->assertEquals(Healthcheck::CRITICAL, $array[2]->getType());
+        $this->assertEquals(Healthcheck::CRITICAL, $array[3]->getType());
     }
 }

@@ -4,12 +4,18 @@ namespace cbednarski\Pulse;
 
 class Healthcheck
 {
+    const INFO = 'info';
+    const WARNING = 'warning';
+    const CRITICAL = 'critical';
+
     private $description = null;
     private $callable = null;
     private $status = null;
+    private $type = null;
 
-    public function __construct($description, \Closure $callable)
+    public function __construct($description, \Closure $callable, $type = self::WARNING)
     {
+        $this->type = $type;
         $this->description = $description;
         $this->callable = $callable;
     }
@@ -17,6 +23,11 @@ class Healthcheck
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function getType()
+    {
+        return $this->type;
     }
 
     public function getStatus()
