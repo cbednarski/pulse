@@ -87,10 +87,10 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     .pass {
         background-color: #7dcd5f;
     }
-    .fail {
+    .critical.fail, .summary.fail {
         background-color: #ff65a8;
     }
-    .warn {
+    .warning.fail {
         background-color: #ffbbe2;
     }
     .summary {
