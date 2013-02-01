@@ -19,7 +19,7 @@ class HealthcheckTest extends PHPUnit_Framework_TestCase
             return true;
         });
         $this->assertTrue($check->getStatus(), 'Verify truthy return value');
-        $this->assertEquals(Healthcheck::WARNING, $check->getType());
+        $this->assertEquals(Healthcheck::CRITICAL, $check->getType());
 
         $test = new StdClass();
         $test->blah = 1;
