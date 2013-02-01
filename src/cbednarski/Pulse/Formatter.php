@@ -11,11 +11,18 @@ class Formatter
         $temp = array('all-passing' => $pulse->getStatus(), 'healthchecks' => array());
 
         foreach ($pulse->getHealthchecks() as $healthcheck) {
-            $temp['healthchecks'][] = array(
+            $temp_array = array(
                 'description' => $healthcheck->getDescription(),
                 'type' => $healthcheck->getType(),
-                'passing' => $healthcheck->getStatus()
             );
+
+            if($healthcheck->getType() === Healthcheck::INFO) {
+                $temp_array['data'] = $healthcheck->getStatus();
+            } else {
+                $temp_array['passing'] = $healthcheck->getStatus();
+            }
+            
+            $temp['healthchecks'][] = $temp_array;
         }
 
         static::responseIsPassing($temp['all-passing']);
@@ -51,7 +58,7 @@ class Formatter
 
     public static function htmlHealthcheck(Healthcheck $healthcheck)
     {        
-        return '            <li class="healthcheck '.static::statusToStr($healthcheck->getStatus()).'">'.$healthcheck->getDescription().': <b>'.static::statusToStr($healthcheck->getStatus()).'</b></li>'."\n";
+        return '            <li class="healthcheck ' . $healthcheck->getType() .static::statusToClass($healthcheck->getStatus()).'">'.$healthcheck->getDescription().': <b>'.static::statusToStr($healthcheck->getStatus()).'</b></li>'."\n";
     }
 
     public static function htmlSummary($status)
@@ -66,7 +73,7 @@ class Formatter
         $temp = '';
 
         foreach ($pulse->getHealthchecks() as $healthcheck) {
-            $temp .= $healthcheck->getDescription() . ': ' . self::statusToStr($healthcheck->getStatus()) . PHP_EOL;
+            $temp .= $healthcheck->getDescription() . ' ('.$healthcheck->getType().'): ' . self::statusToStr($healthcheck->getStatus()) . PHP_EOL;
         }
 
         $temp .= PHP_EOL . 'Healthcheck summary: ' . self::statusToStr($pulse->getStatus());
@@ -78,10 +85,23 @@ class Formatter
 
     public static function statusToStr($status)
     {
-        if($status) {
+        if($status === true) {
             return 'pass';
-        } else {
+        } elseif($status === false) {
             return 'fail';
+        } else {
+            return $status;
+        }
+    }
+
+    public static function statusToClass($status)
+    {
+        if($status === true) {
+            return ' pass';
+        } elseif($status === false) {
+            return ' fail';
+        } else {
+            return null;
         }
     }
 

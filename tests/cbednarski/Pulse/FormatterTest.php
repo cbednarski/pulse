@@ -13,6 +13,12 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     {
         $this->fail_pulse = new Pulse();
 
+        $this->fail_pulse->addInfo('Description', function () {
+            return 'this is some data';
+        });
+        $this->fail_pulse->addWarning('This is a warning', function() {
+            return false;
+        });
         $this->fail_pulse->add('This test should pass', function(){
             return true;
         });
@@ -22,6 +28,9 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
         $this->success_pulse = new Pulse();
 
+        $this->success_pulse->addWarning('This test should fail', function () {
+            return false;
+        });
         $this->success_pulse->add('This test should pass', function(){
             return true;
         });
@@ -32,14 +41,14 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testToJsonFailure()
     {
-        $expected = '{"all-passing":false,"healthchecks":[{"description":"This test should pass","type":"critical","passing":true},{"description":"This test should fail","type":"critical","passing":false}]}';
+        $expected = '{"all-passing":false,"healthchecks":[{"description":"Description","type":"info","data":"this is some data"},{"description":"This is a warning","type":"warning","passing":false},{"description":"This test should pass","type":"critical","passing":true},{"description":"This test should fail","type":"critical","passing":false}]}';
 
         $this->assertEquals($expected, Formatter::toJson($this->fail_pulse));
     }
 
     public function testToJsonSuccess()
     {
-        $expected = '{"all-passing":true,"healthchecks":[{"description":"This test should pass","type":"critical","passing":true},{"description":"This test should also pass","type":"critical","passing":true}]}';
+        $expected = '{"all-passing":true,"healthchecks":[{"description":"This test should fail","type":"warning","passing":false},{"description":"This test should pass","type":"critical","passing":true},{"description":"This test should also pass","type":"critical","passing":true}]}';
 
         $this->assertEquals($expected, Formatter::toJson($this->success_pulse));
     }
@@ -100,8 +109,10 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 <body>
     <div id="wrapper">
         <ul>
-            <li class="healthcheck pass">This test should pass: <b>pass</b></li>
-            <li class="healthcheck fail">This test should fail: <b>fail</b></li>
+            <li class="healthcheck info">Description: <b>this is some data</b></li>
+            <li class="healthcheck warning fail">This is a warning: <b>fail</b></li>
+            <li class="healthcheck critical pass">This test should pass: <b>pass</b></li>
+            <li class="healthcheck critical fail">This test should fail: <b>fail</b></li>
 
             <li class="summary fail">Healthcheck summary: fail</li>
         </ul>
@@ -121,8 +132,10 @@ HEREDOC;
     public function testToPlainFailure()
     {
         $expected = <<<HEREDOC
-This test should pass: pass
-This test should fail: fail
+Description (info): this is some data
+This is a warning (warning): fail
+This test should pass (critical): pass
+This test should fail (critical): fail
 
 Healthcheck summary: fail
 HEREDOC;
@@ -133,8 +146,9 @@ HEREDOC;
     public function testToPlainSuccess()
     {
         $expected = <<<HEREDOC
-This test should pass: pass
-This test should also pass: pass
+This test should fail (warning): fail
+This test should pass (critical): pass
+This test should also pass (critical): pass
 
 Healthcheck summary: pass
 HEREDOC;

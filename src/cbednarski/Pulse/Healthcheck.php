@@ -13,7 +13,7 @@ class Healthcheck
     private $status = null;
     private $type = null;
 
-    public function __construct($description, \Closure $callable, $type = self::WARNING)
+    public function __construct($description, \Closure $callable, $type = self::CRITICAL)
     {
         $this->type = $type;
         $this->description = $description;
