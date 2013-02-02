@@ -26,24 +26,21 @@ Run `composer install`, include `vendor/autoload.php`, and you're off to the rac
 
 ## Example Usage
 
+#### Critical Checks
+
+Healthchecks are critical by default, which means that the healthcheck page will return a 503 status code. Use these to see when there is a critical failure in your system. Critical checks must return boolean `true` or `false`. Add them with `add()`, or more explicitly with `addCritical()`.
+
 Here's an example implementation of `healthcheck.php` that checks connectivity to memcache:
 
 ```php
 $pulse = new cbednarski\Pulse\Pulse();
 
-// Default checks are critical, which means that the healthcheck page will return a 503
-// Use these to see when there is a critical failure in your system
 $pulse->add("Check that config file is readable", function(){
-	return is_readable('/path/to/my/config/file');
+	return is_readable('/path/to/your/config/file');
 });
 
-# include '/path/to/my/config/file';
-$config = array(
-	'memcache_host' => '127.0.0.1',
-	'memcache_port' => 11211
-);
+include '/path/to/your/config/file';
 
-// You can be explicit about declaring critical checks
 $pulse->addCritical("Check memcache connectivity", function() use ($config) {
 	$memcache = new Memcache();
 	if(!$memcache->connect($config['memcache_host'], $config['memcache_port'])){
@@ -54,15 +51,24 @@ $pulse->addCritical("Check memcache connectivity", function() use ($config) {
 	$memcache->set($key, $msg);
 	return $memcache->get($key) === $msg;
 });
+```
 
-// For non-critical checks you can use a warning and you'll get status 200 even if these fail
-// Use these to see when your app is experiencing service degredation but is still available
+#### Warnings
+
+For non-critical checks you can use a warning and you'll get status 200 even if these fail. Use these to see when your app is experiencing service degredation but is still available. Warning checks must return boolean `true` or `false`.
+
+```php
 $pulse->addWarning("Verify connectivity to youtube", function() {
 	$youtube = new YoutubeClient();
 	return $youtube->isUp();
 });
+```
 
-// If you want to pass back non-boolean data, you can use info
+#### Information
+
+If you want to pass back non-boolean, informational data, you can use `addInfo()`.
+
+```php
 $pulse->addInfo("Today is", function() {
 	return date('l');
 });
