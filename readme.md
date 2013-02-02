@@ -5,7 +5,7 @@ Pulse allows you to easily write healthchecks for your application and display a
 [![Build Status](https://travis-ci.org/cbednarski/pulse.png)]
 (https://travis-ci.org/cbednarski/pulse)
 
-#### Wait, what's a healtcheck?
+#### Wait, what's a healthcheck?
 
 Healthchecks are a great way to test system health and connectivity to other services. For example, you can verify connectivity to memcache or mysql, that your app can read / write to certain files, or that your API key for a third-party service is still working.
 
@@ -31,6 +31,8 @@ Here's an example implementation of `healthcheck.php` that checks connectivity t
 ```php
 $pulse = new cbednarski\Pulse\Pulse();
 
+// Default checks are critical, which means that the healthcheck page will return a 503
+// Use these to see when there is a critical failure in your system
 $pulse->add("Check that config file is readable", function(){
 	return is_readable('/path/to/my/config/file');
 });
@@ -41,7 +43,8 @@ $config = array(
 	'memcache_port' => 11211
 );
 
-$pulse->add("Check memcache connectivity", function() use ($config) {
+// You can be explicit about declaring critical checks
+$pulse->addCritical("Check memcache connectivity", function() use ($config) {
 	$memcache = new Memcache();
 	if(!$memcache->connect($config['memcache_host'], $config['memcache_port'])){
 		return false;
@@ -50,6 +53,18 @@ $pulse->add("Check memcache connectivity", function() use ($config) {
 	$msg = 'memcache is working';
 	$memcache->set($key, $msg);
 	return $memcache->get($key) === $msg;
+});
+
+// For non-critical checks you can use a warning and you'll get status 200 even if these fail
+// Use these to see when your app is experiencing service degredation but is still available
+$pulse->addWarning("Verify connectivity to youtube", function() {
+	$youtube = new YoutubeClient();
+	return $youtube->isUp();
+});
+
+// If you want to pass back non-boolean data, you can use info
+$pulse->addInfo("Today is", function() {
+	return date('l');
 });
 
 $pulse->check();
