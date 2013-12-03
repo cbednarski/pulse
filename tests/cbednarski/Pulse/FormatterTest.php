@@ -138,6 +138,7 @@ This test should pass (critical): pass
 This test should fail (critical): fail
 
 Healthcheck summary: fail
+
 HEREDOC;
 
         $this->assertEquals($expected, Formatter::toPlain($this->fail_pulse));
@@ -151,6 +152,7 @@ This test should pass (critical): pass
 This test should also pass (critical): pass
 
 Healthcheck summary: pass
+
 HEREDOC;
 
         $this->assertEquals($expected, Formatter::toPlain($this->success_pulse));
