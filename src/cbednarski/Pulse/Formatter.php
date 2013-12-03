@@ -141,6 +141,7 @@ class Formatter
     private static function contentType($type)
     {
         if (php_sapi_name() !== 'cli') {
+            header('Cache-Control: no-cache');
             header('Content-Type: ' . $type);
         }
     }
