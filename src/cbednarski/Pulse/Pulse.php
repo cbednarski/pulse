@@ -10,7 +10,7 @@ class Pulse
      * Convenience function for adding simple healthchecks. Note: These default to
      * type Healthcheck::CRITICAL.
      *
-     * @param string $description A description of this check
+     * @param string  $description A description of this check
      * @param Closure $healthcheck A callable that returns true when the check passes, false on failure
      */
     public function add($description, \Closure $healthcheck)

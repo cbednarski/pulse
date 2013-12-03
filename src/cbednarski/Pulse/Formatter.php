@@ -16,12 +16,12 @@ class Formatter
                 'type' => $healthcheck->getType(),
             );
 
-            if($healthcheck->getType() === Healthcheck::INFO) {
+            if ($healthcheck->getType() === Healthcheck::INFO) {
                 $temp_array['data'] = $healthcheck->getStatus();
             } else {
                 $temp_array['passing'] = $healthcheck->getStatus();
             }
-            
+
             $temp['healthchecks'][] = $temp_array;
         }
 
@@ -57,7 +57,7 @@ class Formatter
     }
 
     public static function htmlHealthcheck(Healthcheck $healthcheck)
-    {        
+    {
         return '            <li class="healthcheck ' . $healthcheck->getType() .static::statusToClass($healthcheck->getStatus()).'">'.$healthcheck->getDescription().': <b>'.static::statusToStr($healthcheck->getStatus()).'</b></li>'."\n";
     }
 
@@ -85,9 +85,9 @@ class Formatter
 
     public static function statusToStr($status)
     {
-        if($status === true) {
+        if ($status === true) {
             return 'pass';
-        } elseif($status === false) {
+        } elseif ($status === false) {
             return 'fail';
         } else {
             return $status;
@@ -96,9 +96,9 @@ class Formatter
 
     public static function statusToClass($status)
     {
-        if($status === true) {
+        if ($status === true) {
             return ' pass';
-        } elseif($status === false) {
+        } elseif ($status === false) {
             return ' fail';
         } else {
             return null;
@@ -135,6 +135,7 @@ class Formatter
                 }
             }
         }
+
         return false;
     }
 

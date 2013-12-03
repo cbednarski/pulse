@@ -35,12 +35,14 @@ class Healthcheck
         if ($this->status === null) {
             $this->status = $this->call();
         }
+
         return $this->status;
     }
 
     private function call()
     {
         $c = $this->callable;
+
         return $c();
     }
 }
