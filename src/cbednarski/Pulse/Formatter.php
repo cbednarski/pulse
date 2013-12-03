@@ -76,7 +76,7 @@ class Formatter
             $temp .= $healthcheck->getDescription() . ' ('.$healthcheck->getType().'): ' . self::statusToStr($healthcheck->getStatus()) . PHP_EOL;
         }
 
-        $temp .= PHP_EOL . 'Healthcheck summary: ' . self::statusToStr($pulse->getStatus());
+        $temp .= PHP_EOL . 'Healthcheck summary: ' . self::statusToStr($pulse->getStatus()) . PHP_EOL;
 
         static::responseIsPassing($pulse->getStatus());
 
