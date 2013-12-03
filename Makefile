@@ -2,4 +2,4 @@ all: init test
 init:
 	composer install
 test:
-	phpunit
+	php vendor/phpunit/phpunit/phpunit.php
