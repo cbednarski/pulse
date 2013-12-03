@@ -94,6 +94,10 @@ To enable json-y goodness, you'll need to send `Accept: application/json`. E.g:
 
 	$ curl -H "Accept: application/json" http://example.com/healthcheck.php
 
+## Examples
+
+You can see some very basic example healthchecks in `healthcheck-sample.php`. If you have php 5.4 or above, running `make dev` will load this so you can see it in action and play around with it.
+
 ## Does Pulse Work With X?
 
 Yep. Pulse is designed to be self-contained and is very simple, so it doesn't require you to use any particular framework. You are free to include other things like yml parsers, etc. if you choose, but we recommend NOT including a full framework stack on top of it. If the framework fails to load for some reason, your healthchecks won't be displayed, meaning they're not useful for diagnosing whatever problem you've encountered.
