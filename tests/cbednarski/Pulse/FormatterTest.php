@@ -123,7 +123,6 @@ class FormatterTest extends PHPUnit_Framework_TestCase
         </div>
     </div>
 </body>
-</head>
 HEREDOC;
 
         $this->assertEquals($expected, Formatter::toHtml($this->fail_pulse));
